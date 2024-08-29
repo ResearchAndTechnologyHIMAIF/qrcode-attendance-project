@@ -1,4 +1,4 @@
-const sheets = require("../services/google/sheets");
+const { sheets } = require("../services/google/index");
 const { formatDate } = require("../middlewares/dateFormatter");
 
 const attendUser = async (req, res, next) => {

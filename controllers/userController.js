@@ -1,4 +1,4 @@
-const sheets = require("../services/google/sheets");
+const { sheets } = require("../services/google/index");
 
 const getUserRegistrationData = async (req, res, next) => {
   try {

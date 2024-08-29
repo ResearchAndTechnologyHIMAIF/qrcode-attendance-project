@@ -1,13 +1,12 @@
 const qrcode = require("qrcode");
 const path = require("path");
 const fs = require("fs");
-const { sheets } = require("../services/google/index");
 const { sendEmail } = require("../email/sendEmail");
-const { formatDate } = require("../middlewares/dateFormatter");
+const { sheets } = require("../services/google");
 
-const registUser = async (req, res, next) => {
+const sendQR = async (req, res, next) => {
   try {
-    const getAlluser = await sheets.spreadsheets.values
+    const getAllRegisteredUser = await sheets.spreadsheets.values
       .get({
         spreadsheetId: process.env.SPREADSHEET_REGISTRATION_ID,
         range: "A2:G",
@@ -20,32 +19,20 @@ const registUser = async (req, res, next) => {
         console.error("Error:", err);
       });
 
-    if (getAlluser !== undefined) {
+    if (getAllRegisteredUser !== undefined) {
       function checkEmail(email) {
-        return email[1] == req.body.email;
+        return email[1] == getAllRegisteredUser[getAllRegisteredUser.length - 1][1];
       }
 
-      const user = getAlluser.find(checkEmail);
+      const user = getAllRegisteredUser.find(checkEmail);
 
       if (user) return res.status(200).json({ message: "You already registered for this event, please check your email" });
     }
 
-    if (getAlluser == undefined || getAlluser) {
-      const dataUser = req.body;
-      let data = Object.values(dataUser);
-      data.unshift(formatDate(new Date()));
-      const values = [data];
-
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: process.env.SPREADSHEET_REGISTRATION_ID,
-        range: "A:G",
-        valueInputOption: "RAW",
-        resource: {
-          values,
-        },
-      });
-
-      const link = `${process.env.CORS}/api/v1/attend?email=${req.body.email}&nim=${req.body.nim}&name=${req.body.name}&generation=${req.body.generation}&department=${req.body.department}&classes=${req.body.classes}`;
+    if (getAllRegisteredUser == undefined || getAllRegisteredUser) {
+      const link = `${process.env.CORS}/api/v1/attend?email=${getAllRegisteredUser[getAllRegisteredUser.length - 1][1]}&nim=${getAllRegisteredUser[getAllRegisteredUser.length - 1][2]}&name=${
+        getAllRegisteredUser[getAllRegisteredUser.length - 1][3]
+      }&generation=${getAllRegisteredUser[getAllRegisteredUser.length - 1][4]}&department=${getAllRegisteredUser[getAllRegisteredUser.length - 1][5]}&classes=${getAllRegisteredUser[getAllRegisteredUser.length - 1][6]}`;
 
       const encodedLink = link.replace(/ /g, "%20");
 
@@ -55,7 +42,7 @@ const registUser = async (req, res, next) => {
       const imageBuffer = Buffer.from(qrCodeDataUrl.replace(/^data:image\/png;base64,/, ""), "base64");
       fs.writeFileSync(qrCodeFilePath, imageBuffer);
 
-      await sendEmail(req.body.email, "[TICKET CONFIRMATION] You're ready for HIMAIF Event!", qrCodeFilePath, req.body.name);
+      await sendEmail(getAllRegisteredUser[getAllRegisteredUser.length - 1][1], "[TICKET CONFIRMATION] You're ready for HIMAIF Event!", qrCodeFilePath, getAllRegisteredUser[getAllRegisteredUser.length - 1][2]);
       fs.unlinkSync(qrCodeFilePath);
       res.status(200).json({ message: "QR Code has been successfully sent, Please check your email:)" });
     }
@@ -64,4 +51,4 @@ const registUser = async (req, res, next) => {
   }
 };
 
-module.exports = { registUser };
+module.exports = { sendQR };
