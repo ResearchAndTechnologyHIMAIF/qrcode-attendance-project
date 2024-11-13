@@ -2,8 +2,8 @@ const qrcode = require("qrcode");
 const path = require("path");
 const fs = require("fs");
 const { sheets } = require("../services/google/index");
-const { sendEmail } = require("../email/sendEmail");
 const { formatDate } = require("../utils/utils");
+const { sendEmail } = require("../utils/sendEmail");
 
 const registUser = async (req, res, next) => {
   try {
