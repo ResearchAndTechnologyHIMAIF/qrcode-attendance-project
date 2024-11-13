@@ -57,7 +57,7 @@ const registUser = async (req, res, next) => {
 
       const qrCodeFilePath = path.join(
         __dirname,
-        "../public/temp",
+        "../public/tmp",
         "QR-Code-Attendance.png"
       );
       const imageBuffer = Buffer.from(
