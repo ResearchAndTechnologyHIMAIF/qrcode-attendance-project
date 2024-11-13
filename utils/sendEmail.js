@@ -8,6 +8,7 @@ const sendEmail = async (email, subject, qrCodeFilePath, fullname) => {
       host: "smtp.gmail.com",
       port: 587,
       service: "gmail",
+      secure: true,
       auth: {
         user: process.env.EMAIL,
         pass: process.env.PWEMAIL,
