@@ -55,11 +55,7 @@ const registUser = async (req, res, next) => {
 
       const qrCodeDataUrl = await qrcode.toDataURL(encodedLink);
 
-      const qrCodeFilePath = path.join(
-        __dirname,
-        "../public/tmp",
-        "QR-Code-Attendance.png"
-      );
+      const qrCodeFilePath = path.join("/tmp", "QR-Code-Attendance.png");
       const imageBuffer = Buffer.from(
         qrCodeDataUrl.replace(/^data:image\/png;base64,/, ""),
         "base64"
