@@ -1,9 +1,9 @@
 const qrcode = require("qrcode");
 const path = require("path");
 const fs = require("fs");
-const sheets = require("../services/google/sheets");
+const { sheets } = require("../services/google/index");
 const { sendEmail } = require("../email/sendEmail");
-const { formatDate } = require("../middlewares/dateFormatter");
+const { formatDate } = require("../utils/utils");
 
 const registUser = async (req, res, next) => {
   try {
@@ -27,7 +27,11 @@ const registUser = async (req, res, next) => {
 
       const user = getAlluser.find(checkEmail);
 
-      if (user) return res.status(200).json({ message: "You already registered for this event, please check your email" });
+      if (user)
+        return res.status(200).json({
+          message:
+            "You already registered for this event, please check your email",
+        });
     }
 
     if (getAlluser == undefined || getAlluser) {
@@ -45,19 +49,35 @@ const registUser = async (req, res, next) => {
         },
       });
 
-      const link = `${process.env.CORS}/api/v1/attend?email=${req.body.email}&nim=${req.body.nim}&name=${req.body.name}&generation=${req.body.generation}&department=${req.body.department}&classes=${req.body.classes}`;
+      const link = `${process.env.CORS}/api/v1/attend?email=${req.body.email}&nim=${req.body.nim}&name=${req.body.name}&phone=${req.body.phone}&generation=${req.body.generation}&department=${req.body.department}&classes=${req.body.classes}`;
 
       const encodedLink = link.replace(/ /g, "%20");
 
       const qrCodeDataUrl = await qrcode.toDataURL(encodedLink);
 
-      const qrCodeFilePath = path.join(__dirname, "../public/temp", "QR-Code-Attendance.png");
-      const imageBuffer = Buffer.from(qrCodeDataUrl.replace(/^data:image\/png;base64,/, ""), "base64");
+      const qrCodeFilePath = path.join(
+        __dirname,
+        "../public/temp",
+        "QR-Code-Attendance.png"
+      );
+      const imageBuffer = Buffer.from(
+        qrCodeDataUrl.replace(/^data:image\/png;base64,/, ""),
+        "base64"
+      );
+
       fs.writeFileSync(qrCodeFilePath, imageBuffer);
 
-      await sendEmail(req.body.email, "[TICKET CONFIRMATION] You're ready for HIMAIF Event!", qrCodeFilePath, req.body.name);
+      await sendEmail(
+        req.body.email,
+        "[TICKET CONFIRMATION] You're ready for HIMAIF Event!",
+        qrCodeFilePath,
+        req.body.name
+      );
       fs.unlinkSync(qrCodeFilePath);
-      res.status(200).json({ message: "QR Code has been successfully sent, Please check your email:)" });
+      res.status(200).json({
+        message:
+          "QR Code has been successfully sent, Please check your email:)",
+      });
     }
   } catch (error) {
     next(error);

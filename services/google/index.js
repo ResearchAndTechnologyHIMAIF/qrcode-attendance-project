@@ -11,13 +11,18 @@ const auth = new GoogleAuth({
     client_id: process.env.SERVICE_GOOGLE_SHEETS_CLIENT_ID,
     auth_uri: process.env.SERVICE_GOOGLE_SHEETS_AUTH_URI,
     token_uri: process.env.SERVICE_GOOGLE_SHEETS_AUTH_URI,
-    auth_provider_x509_cert_url: process.env.SERVICE_GOOGLE_SHEETS_AUTH_PROVIDER_CERT_URL,
+    auth_provider_x509_cert_url:
+      process.env.SERVICE_GOOGLE_SHEETS_AUTH_PROVIDER_CERT_URL,
     client_x509_cert_url: process.env.SERVICE_GOOGLE_SHEETS_CLIENT_CERT_URL,
     universe_domain: process.env.SERVICE_GOOGLE_SHEETS_UNIVERSE_DOMAIN,
   },
-  scopes: "https://www.googleapis.com/auth/spreadsheets",
+  scopes: [
+    "https://www.googleapis.com/auth/drive",
+    "https://www.googleapis.com/auth/spreadsheets",
+  ],
 });
 
+const forms = google.forms({ version: "v1", auth });
 const sheets = google.sheets({ version: "v4", auth });
 
-module.exports = sheets;
+module.exports = { forms, sheets };
