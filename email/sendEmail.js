@@ -13,52 +13,91 @@ const sendEmail = async (email, subject, qrCodeFilePath, fullname) => {
         pass: process.env.PWEMAIL,
       },
     });
-
-    const imageDataUri = `data:image/png;base64,${qrCodeFilePath}`;
-
     const mailOptions = {
       from: "noreply@gmail.com",
       to: email,
       subject: subject,
       attachments: [
         {
-          filename: "qrcode.png",
+          filename: `${fullname}-QRCodeAttendance.png`,
           path: qrCodeFilePath,
         },
       ],
       html: `
       <!DOCTYPE html>
-      <html>
-      <head>
-        <title>QR Code Attendance</title>
-        <style>
-          body {
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        body {
             font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+        }
+        span {
+            font-weight: bolder;
+        }
+        a {
+            color: #4285f4;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            margin: 0 auto;
+            background-color: #ffffff;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .header {
+            background-color: #00295e;
+            color: white;
+            padding: 10px 0;
             text-align: center;
-            background-color: #f0f0f0;
-            margin: 50px;
-          }
-          h1 {
+        }
+        .content {
+            padding: 20px;
+        }
+        .footer {
+            background-color: #f4f4f4;
             color: #333;
-          }
-          img {
-            border: 2px solid #ccc;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 12px;
+        }
+        .button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
             border-radius: 5px;
-            margin-top: 20px;
-          }
-
-          p {
-            color: #666;
-            margin-top: 10px;
-          }
-        </style>
-      </head>
-      <body>
-          <h1>QR Code Attendance ${fullname}</h1>
-          <img src=${imageDataUri} alt="QR Code"/>
-          <p>Scan this QR code to record your attendance.</p>
-      </body>
-      </html>
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>TICKET CONFIRMATION</h1>
+        </div>
+        <div class="content">
+            <p>Hi ${fullname}!,</p>
+            <p>You're ready for HIMAIF Event. Here are the details:</p>
+            <ul>
+                <li><strong>Date:</strong> Saturday, 23 November 2024</li>
+                <li><strong>Time:</strong> 08.30 - 12.00</li>
+                <li><strong>Location:</strong> <a href="https://maps.app.goo.gl/ypbf3SD4GP51UNBV9">Bandung Creative Hub</a></li>
+            </ul>
+            <p>Your ticket is attached below, <span>please bring the ticket to the location for your presence</span></p>
+            <p>We look forward to seeing you there!</p>
+        </div>
+        <div class="footer">
+            <p>© 2024 Research & Technology Division HIMAIF IWU. All rights reserved.</p>
+        </div>
+    </div>
+</body>
+</html>
       `,
     };
 
