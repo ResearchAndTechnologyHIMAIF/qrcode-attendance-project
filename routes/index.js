@@ -11,7 +11,7 @@ app.get("/", (req, res) => {
 });
 
 app.use(API, registRoutes);
-app.use(API, attendRoutes);
+// app.use(API, attendRoutes);
 app.use(API, userRoutes);
 
 module.exports = app;
