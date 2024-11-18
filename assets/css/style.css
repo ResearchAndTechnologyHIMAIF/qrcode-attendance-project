@@ -1,0 +1,43 @@
+body {
+  background: url(../img/FEEDS\ DAN\ LOGO\ RAPZ\ HAIR\ 21.png);
+  color: #fff;
+  font-family: "Poppins", sans-serif;
+}
+
+.container {
+  background-color: rgba(122, 0, 59, 0.39);
+  top: 0;
+  bottom: 0;
+  height: 150vh;
+}
+.icon-image {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.header .h-1 {
+  font-size: 2rem;
+  font-weight: 900;
+  margin-bottom: -0.5rem;
+}
+.header .h-2 {
+  font-size: 1.4rem;
+  font-weight: 900;
+}
+
+form {
+  font-family: "Raleway", sans-serif;
+  font-weight: bold;
+}
+
+.btn {
+  font-weight: 800;
+}
+
+footer {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: "Lexend", system-ui;
+}
