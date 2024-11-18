@@ -1,0 +1,14 @@
+{
+    "builds": [
+      {
+        "src": "index.html",
+        "use": "@vercel/vite"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/index.html"
+      }
+    ]
+  }
