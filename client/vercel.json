@@ -1,9 +1,3 @@
 {
-    "version": 2,
-    "routes": [
-      {
-        "src": "/api/v1/regist",
-        "dest": "/api/v1/regist"
-      }
-    ]
-  }
+  "rewrites": [{ "source": "/(.*)", "destination": "/index.html" }]
+}
