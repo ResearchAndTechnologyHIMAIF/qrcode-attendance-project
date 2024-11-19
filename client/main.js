@@ -1,24 +1,28 @@
 import attendPage from "./pages/attendPage";
 import homePage from "./pages/homePage";
 
-const routes = {
-  "/": homePage,
-  "/attend": attendPage,
-};
+const routes = [
+  {
+    path: "/",
+    component: homePage,
+  },
+  {
+    path: "/attend",
+    component: attendPage,
+  },
+];
 
 window.addEventListener("popstate", () => {
-  handleRouteChange();
+  route();
 });
 
-function handleRouteChange() {
+function route() {
   const currentPath = window.location.pathname;
-  const routeHandler = routes[currentPath];
+  const matchedRoute = routes.find((route) => route.path === currentPath);
 
-  if (routeHandler) {
-    routeHandler();
-  } else {
-    console.error("Route not found:", currentPath);
+  if (matchedRoute) {
+    document.getElementById("content").innerHTML = matchedRoute.component();
   }
 }
 
-handleRouteChange();
+route();
