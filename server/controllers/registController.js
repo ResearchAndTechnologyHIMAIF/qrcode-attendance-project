@@ -49,7 +49,7 @@ const registUser = async (req, res, next) => {
         },
       });
 
-      const link = `${process.env.CORS}/api/v1/attend?email=${req.body.email}&nim=${req.body.nim}&name=${req.body.name}&phone=${req.body.phone}&generation=${req.body.generation}&department=${req.body.department}&classes=${req.body.classes}`;
+      const link = `https://qrcode-attendance-project-client.vercel.app/attend?email=${req.body.email}&nim=${req.body.nim}&name=${req.body.name}&phone=${req.body.phone}&generation=${req.body.generation}&department=${req.body.department}&classes=${req.body.classes}`;
 
       const encodedLink = link.replace(/ /g, "%20");
 
