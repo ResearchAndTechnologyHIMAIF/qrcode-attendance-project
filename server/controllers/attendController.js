@@ -31,7 +31,7 @@ const attendUser = async (req, res, next) => {
 
     if (getAllUserAttended !== undefined) {
       function checkEmail(email) {
-        return email[1] == req.query.email;
+        return email[1] == req.body.email;
       }
 
       const userAttended = getAllUserAttended.find(checkEmail);
@@ -44,14 +44,14 @@ const attendUser = async (req, res, next) => {
 
     if (getAllUserRegistered !== undefined) {
       function checkEmail(email) {
-        return email[0] == req.query.email;
+        return email[0] == req.body.email;
       }
 
       const userRegistered = getAllUserRegistered.find(checkEmail);
 
       if (
         JSON.stringify(userRegistered) !==
-        JSON.stringify(Object.values(req.query))
+        JSON.stringify(Object.values(req.body))
       )
         return res
           .status(200)
@@ -59,24 +59,31 @@ const attendUser = async (req, res, next) => {
     }
 
     if (getAllUserAttended == undefined || getAllUserAttended) {
-      const dataUser = req.query;
-      let data = Object.values(dataUser);
-      data.unshift(formatDate(new Date()));
-      const values = [data];
+      if (getAllUserRegistered == undefined) {
+        return res
+          .status(200)
+          .json({ message: "Your email haven't registered to this event" });
+      } else {
+        const dataUser = req.body;
+        let data = Object.values(dataUser);
+        data.unshift(formatDate(new Date()));
+        const values = [data];
 
-      await sheets.spreadsheets.values.append({
-        spreadsheetId: process.env.SPREADSHEET_ATTENDANCE_ID,
-        range: "A:H",
-        valueInputOption: "RAW",
-        resource: {
-          values,
-        },
-      });
+        await sheets.spreadsheets.values.append({
+          spreadsheetId: process.env.SPREADSHEET_ATTENDANCE_ID,
+          range: "A:H",
+          valueInputOption: "RAW",
+          resource: {
+            values,
+          },
+        });
+
+        res.status(200).json({
+          message:
+            "Your email attendance have been recorded, enjoy the event:) ",
+        });
+      }
     }
-
-    res.status(200).json({
-      message: "Your email attendance have been recorded, enjoy the event:) ",
-    });
   } catch (error) {
     next(error);
   }

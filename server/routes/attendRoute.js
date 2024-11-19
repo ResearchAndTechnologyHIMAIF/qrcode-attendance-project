@@ -2,6 +2,6 @@ const express = require("express");
 const { attendUser } = require("../controllers/attendController");
 const router = express();
 
-router.get("/attend", attendUser);
+router.post("/attend", attendUser);
 
 module.exports = router;
