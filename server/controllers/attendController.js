@@ -38,7 +38,7 @@ const attendUser = async (req, res, next) => {
 
       if (userAttended)
         return res
-          .status(200)
+          .status(202)
           .json({ message: "Your email already attended for this event" });
     }
 
@@ -78,7 +78,7 @@ const attendUser = async (req, res, next) => {
           },
         });
 
-        res.status(200).json({
+        res.status(201).json({
           message:
             "Your email attendance have been recorded, enjoy the event:) ",
         });

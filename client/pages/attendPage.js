@@ -15,8 +15,8 @@ const attendPage = () => {
   const department = urlParams.get("department");
   const classes = urlParams.get("classes");
 
-  try {
-    const attendPost = async () => {
+  const attendPost = async () => {
+    try {
       const response = await axios.post(`http://localhost:8080/api/v1/attend`, {
         email: email,
         nim: nim,
@@ -27,21 +27,49 @@ const attendPage = () => {
         classes: classes,
       });
 
-      const data = response.data;
-      Swal.fire({
-        icon: "success",
-        title: "Success!",
-        text: data.message,
-      });
-    };
-    attendPost();
-  } catch (error) {
-    Swal.fire({
-      icon: "success",
-      title: "Success!",
-      text: error,
-    });
-  }
+      if (response.status === 202) {
+        Swal.fire({
+          icon: "info",
+          title: "Info!",
+          text: response.data.message,
+        });
+      } else if (response.status === 201) {
+        Swal.fire({
+          icon: "success",
+          title: "Success!",
+          text: response.data.message,
+        });
+      } else {
+        Swal.fire({
+          icon: "warning",
+          title: "Warning!",
+          text: response.data.message,
+        });
+      }
+    } catch (error) {
+      if (error.response) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: `Server responded with an error: ${error.response.status}`,
+        });
+      } else if (error.request) {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "There was a problem making the request. Check your internet connection.",
+        });
+      } else {
+        Swal.fire({
+          icon: "error",
+          title: "Error!",
+          text: "An unexpected error occurred. Please try again later.",
+        });
+      }
+    }
+  };
+
+  attendPost();
 };
 
 export default attendPage;
