@@ -1,5 +1,4 @@
 const { sheets } = require("../services/google/index");
-const { formatDate } = require("../utils/utils");
 
 const attendUser = async (req, res, next) => {
   try {
@@ -66,7 +65,7 @@ const attendUser = async (req, res, next) => {
       } else {
         const dataUser = req.body;
         let data = Object.values(dataUser);
-        data.unshift(formatDate(new Date()));
+        data.unshift(new Date().toLocaleString());
         const values = [data];
 
         await sheets.spreadsheets.values.append({

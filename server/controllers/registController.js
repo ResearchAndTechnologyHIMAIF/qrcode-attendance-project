@@ -2,7 +2,6 @@ const qrcode = require("qrcode");
 const path = require("path");
 const fs = require("fs");
 const { sheets } = require("../services/google/index");
-const { formatDate } = require("../utils/utils");
 const { sendEmail } = require("../utils/sendEmail");
 
 const registUser = async (req, res, next) => {
@@ -37,7 +36,7 @@ const registUser = async (req, res, next) => {
     if (getAlluser == undefined || getAlluser) {
       const dataUser = req.body;
       let data = Object.values(dataUser);
-      data.unshift(formatDate(new Date()));
+      data.unshift(new Date().toLocaleString());
       const values = [data];
 
       await sheets.spreadsheets.values.append({
