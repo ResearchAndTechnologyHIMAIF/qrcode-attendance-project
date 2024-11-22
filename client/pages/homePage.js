@@ -101,7 +101,7 @@ const homePage = () => {
             </div>
 
             <div class="d-grid justify-content-end mt-3">
-              <button class="btn btn-primary" type="submit">Submit</button>
+              <button id="submitButton" class="btn btn-primary" type="submit"></button>
             </div>
           </form>
           <footer class="mt-5">
@@ -112,11 +112,17 @@ const homePage = () => {
   `;
 
   const form = document.getElementById("registerForm");
+  const submitButton = document.getElementById("submitButton");
+
+  submitButton.disabled = false;
+  submitButton.textContent = "Submit";
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     try {
       const registerPost = async () => {
+        submitButton.disabled = true;
+        submitButton.textContent = "Loading...";
         const response = await axios.post(
           `${import.meta.env.VITE_API_HOST}/api/v1/regist`,
           {
@@ -129,6 +135,8 @@ const homePage = () => {
             classes: document.getElementById("classes").value,
           }
         );
+        submitButton.disabled = false;
+        submitButton.textContent = "Submit";
 
         const data = response.data;
         Swal.fire({
@@ -139,6 +147,8 @@ const homePage = () => {
       };
       registerPost();
     } catch (error) {
+      submitButton.disabled = false;
+      submitButton.textContent = "Submit";
       Swal.fire({
         icon: "success",
         title: "Success!",
