@@ -65,7 +65,9 @@ const attendUser = async (req, res, next) => {
       } else {
         const dataUser = req.body;
         let data = Object.values(dataUser);
-        data.unshift(new Date().toLocaleString());
+        data.unshift(
+          new Date().toLocaleString("id-ID", { timeZone: "Asia/Jakarta" })
+        );
         const values = [data];
 
         await sheets.spreadsheets.values.append({
