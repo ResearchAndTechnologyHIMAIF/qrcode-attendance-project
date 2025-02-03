@@ -38,7 +38,7 @@ const attendUser = async (req, res, next) => {
       if (userAttended)
         return res
           .status(202)
-          .json({ message: "Your email already attended for this event" });
+          .json({ message: "You already attended to this event" });
     }
 
     if (getAllUserRegistered !== undefined) {
@@ -54,14 +54,14 @@ const attendUser = async (req, res, next) => {
       )
         return res
           .status(200)
-          .json({ message: "Your email haven't registered to this event" });
+          .json({ message: "You haven't registered to this event" });
     }
 
     if (getAllUserAttended == undefined || getAllUserAttended) {
       if (getAllUserRegistered == undefined) {
         return res
           .status(200)
-          .json({ message: "Your email haven't registered to this event" });
+          .json({ message: "You haven't registered to this event" });
       } else {
         const dataUser = req.body;
         let data = Object.values(dataUser);
@@ -80,8 +80,7 @@ const attendUser = async (req, res, next) => {
         });
 
         res.status(201).json({
-          message:
-            "Your email attendance have been recorded, enjoy the event:) ",
+          message: "Your attendance have been recorded, enjoy the event:) ",
         });
       }
     }
